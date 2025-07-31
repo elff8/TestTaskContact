@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (_: Request, res: Response) => {
-  res.send('Сервер работает!');
+  res.send('Сервер запущен');
 });
 
 app.get('/api/contacts', async (_: Request, res: Response) => {
@@ -28,7 +28,7 @@ app.post('/api/contacts', async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Имя и телефон обязательны' });
   }
   if (!/^\+?\d+$/.test(phone)) {
-    return res.status(400).json({ error: 'Телефон должен содержать только цифры и может начинаться с "+ "' });
+    return res.status(400).json({ error: 'Телефон должен содержать только цифры и может начинаться с+' });
   }
   try {
     const contact = await Contact.create({ name, phone });
@@ -46,7 +46,7 @@ app.put('/api/contacts/:id', async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Имя и телефон обязательны' });
   }
   if (!/^\+?\d+$/.test(phone)) {
-    return res.status(400).json({ error: 'Телефон должен содержать только цифры и может начинаться с "+ "' });
+    return res.status(400).json({ error: 'Телефон должен содержать только цифры и может начинаться с+' });
   }
   try {
     const contact = await Contact.findByPk(id);
@@ -66,7 +66,7 @@ app.delete('/api/contacts/:id', async (req: Request, res: Response) => {
   try {
     const contact = await Contact.findByPk(id);
     if (!contact) {
-      return res.status(404).json({ error: 'Контакт не найден' });
+      return res.status(404).json({ error: 'Контактов нет' });
     }
     await contact.destroy();
     res.status(204).send();
@@ -80,9 +80,9 @@ const start = async () => {
   try {
     await sequelize.authenticate();
     await sequelize.sync(); 
-    console.log('Подключение к PostgreSQL успешно');
+    console.log('Подключено к бд');
     app.listen(5000, () => {
-      console.log('Сервер запущен на порту 5000');
+      console.log('Сервервер запущен');
     });
   } catch (e: unknown) {
     console.error('Ошибка запуска сервера:', e);
