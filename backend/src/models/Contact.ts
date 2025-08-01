@@ -1,4 +1,5 @@
 import { Table, Column, Model, PrimaryKey, AutoIncrement, DataType } from 'sequelize-typescript';
+
 @Table({ tableName: 'contacts' })
 export class Contact extends Model {
   @PrimaryKey
@@ -14,7 +15,10 @@ export class Contact extends Model {
 
   @Column({
     type: DataType.STRING,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      is: /^\+?\d+$/ 
+    }
   })
   phone!: string;
 }
